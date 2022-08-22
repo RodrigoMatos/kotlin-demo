@@ -13,8 +13,7 @@ class KafkaConfig(
 ) {
     @Bean
     fun kafkaAdmin(): KafkaAdmin {
-        val configs: MutableMap<String, Any?> = HashMap()
-        configs[AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG] = servers
+        val configs: MutableMap<String, Any?> = mutableMapOf(Pair(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, servers))
         return KafkaAdmin(configs)
     }
 }
