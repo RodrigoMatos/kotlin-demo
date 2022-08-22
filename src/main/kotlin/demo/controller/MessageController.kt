@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class MessageController(
-    private val service: MessageService
+        private val service: MessageService
 ) {
     @GetMapping
     fun findMessages(): List<MessageEntity> = this.service.findMessages()
@@ -16,8 +16,7 @@ class MessageController(
     fun saveMessage(@RequestBody messageEntity: MessageEntity) = this.service.save(messageEntity)
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable("id") id: String): MessageEntity? {
-        return this.service.findById(id)
-            .orElseThrow { UserNotFound(id) }
+    fun findById(@PathVariable("id") id: String): MessageEntity {
+        return this.service.findById(id) ?: throw UserNotFound(id)
     }
 }

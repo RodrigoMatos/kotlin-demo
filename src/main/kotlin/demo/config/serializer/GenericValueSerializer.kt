@@ -9,11 +9,10 @@ class GenericValueSerializer : Serializer<Any> {
     private val objectMapper = ObjectMapper()
     private val log = LoggerFactory.getLogger(javaClass)
 
-    override fun serialize(topic: String?, data: Any?): ByteArray? {
+    override fun serialize(topic: String?, data: Any?): ByteArray {
         return try {
-            this.objectMapper.writeValueAsBytes(
-                data ?: throw SerializationException("Error when serializing value to ByteArray[]")
-            )
+            data?.let(this.objectMapper::writeValueAsBytes)
+                    ?: throw SerializationException("Error when serializing value to ByteArray[]")
         } catch (e: Exception) {
             log.error("Error on GenericKeySerializer {}", topic, e)
             throw e

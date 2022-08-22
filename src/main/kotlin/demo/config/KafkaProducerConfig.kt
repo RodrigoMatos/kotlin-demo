@@ -2,7 +2,7 @@ package demo.config
 
 import demo.config.serializer.GenericKeySerializer
 import demo.config.serializer.GenericValueSerializer
-import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.ProducerConfig.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,11 +17,11 @@ class KafkaProducerConfig(
 ) {
     @Bean
     fun producerFactory(): ProducerFactory<Any, Any> {
-        val configProps: MutableMap<String, Any> = HashMap()
-        configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = this.servers
-        configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = GenericKeySerializer::class.java
-        configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = GenericValueSerializer::class.java
-        return DefaultKafkaProducerFactory(configProps)
+        return DefaultKafkaProducerFactory(mutableMapOf<String, Any>(
+                BOOTSTRAP_SERVERS_CONFIG to this.servers,
+                KEY_SERIALIZER_CLASS_CONFIG to GenericKeySerializer::class.java,
+                VALUE_SERIALIZER_CLASS_CONFIG to GenericValueSerializer::class.java
+        ))
     }
 
     @Bean

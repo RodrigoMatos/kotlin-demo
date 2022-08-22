@@ -1,11 +1,12 @@
 package demo.services
 
-import demo.entity.MessageEntity
 import demo.dto.MessageDTO
+import demo.entity.MessageEntity
 import demo.repository.MessageRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.util.Optional
-import java.util.UUID
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class MessageService(
@@ -16,14 +17,15 @@ class MessageService(
 
     fun findMessages(): List<MessageEntity> = this.repository.findMessages()
 
+    @Transactional
     fun save(messageEntity: MessageEntity): MessageEntity {
         val entitySaved = this.repository.save(messageEntity)
         val msg = MessageDTO(entitySaved.id!!, entitySaved.text)
-        this.kafkaService.producer(this.topicName, msg.id, msg) {
+        this.kafkaService.produce(this.topicName, msg.id, msg) {
             this.add("random-uuid", UUID.randomUUID().toString())
         }
         return entitySaved
     }
 
-    fun findById(id: String): Optional<MessageEntity> = this.repository.findById(id)
+    fun findById(id: String): MessageEntity? = this.repository.findByIdOrNull(id)
 }
