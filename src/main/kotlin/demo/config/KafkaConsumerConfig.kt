@@ -12,17 +12,17 @@ import org.springframework.kafka.listener.ContainerProperties
 
 @Configuration
 class KafkaConsumerConfig(
-    @Value("\${kafka.bootstrapAddress}")
-    private val servers: String
+        @Value("\${kafka.bootstrapAddress}")
+        private val servers: String
 ) {
     @Bean
     fun consumerFactory(): ConsumerFactory<Any?, Any?> {
-        val props: MutableMap<String, Any> = HashMap()
-        props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = this.servers
-        props[ConsumerConfig.GROUP_ID_CONFIG] = "demo"
-        props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = GenericDeserializer::class.java
-        props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = GenericDeserializer::class.java
-        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
+        val props: MutableMap<String, Any> = mutableMapOf(
+                Pair(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.servers),
+                Pair(ConsumerConfig.GROUP_ID_CONFIG, "demo"),
+                Pair(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, GenericDeserializer::class.java),
+                Pair(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, GenericDeserializer::class.java),
+                Pair(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"))
         return DefaultKafkaConsumerFactory(props)
     }
 
