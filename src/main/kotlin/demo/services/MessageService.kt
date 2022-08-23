@@ -7,17 +7,18 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import kotlin.Exception
 
 @Service
 class MessageService(
-    private val repository: MessageRepository,
-    private val kafkaService: KafkaService
+        private val repository: MessageRepository,
+        private val kafkaService: KafkaService
 ) {
     private val topicName: String = "message"
 
     fun findMessages(): List<MessageEntity> = this.repository.findMessages()
 
-    @Transactional
+    @Transactional(rollbackFor = [Exception::class])
     fun save(messageEntity: MessageEntity): MessageEntity {
         val entitySaved = this.repository.save(messageEntity)
         val msg = MessageDTO(entitySaved.id!!, entitySaved.text)
