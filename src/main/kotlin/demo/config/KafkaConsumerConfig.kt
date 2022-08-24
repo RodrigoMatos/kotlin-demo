@@ -10,6 +10,7 @@ import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.ContainerProperties
 
+
 @Configuration
 class KafkaConsumerConfig(
         @Value("\${kafka.bootstrapAddress}")
@@ -31,7 +32,7 @@ class KafkaConsumerConfig(
                 .apply {
                     consumerFactory = consumerFactory()
                     containerProperties.ackMode = ContainerProperties.AckMode.MANUAL_IMMEDIATE
-                    containerProperties.isSyncCommits = true;
+                    containerProperties.isSyncCommits = true
                 }
     }
 }
